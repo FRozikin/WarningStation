@@ -1,0 +1,873 @@
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using System.Threading;
+using System.IO;
+using System.Reflection;
+
+namespace WS
+{
+    public partial class frmMain : Form
+    {
+        WarningSystem ws = new WarningSystem();
+
+        bool AccessMode = false;
+        bool ConfigMode = false;
+        int IdxImgListStrobe = 0;
+        int IdxImgListSetting = 0;
+        bool EmergencyStop = false;
+        ushort SelectedWarning = 1;
+        bool ConfChanged = false; 
+
+        private void Init()
+        {
+            this.SuspendLayout();
+
+            string Dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+            wbTitle.Navigate(new Uri(Path.Combine(Dir, "title\\title.htm")));
+            PBSM1.Image = imageList2.Images[IdxImgListStrobe];
+            PBTM1.Image = imageList2.Images[IdxImgListSetting];
+
+            this.Width = 800;
+            this.Height = 460;
+
+            lblAccess.Text = "Operator";
+            pnlStart.Enabled = true;
+            pnlStart.Visible = true;
+            pnlStop.Enabled = false;
+            pnlStop.Visible = true;
+
+            txtConfigName.Dock = DockStyle.Fill; 
+
+            //Isi cbo Items
+            AddCbItems(cb1, 300);
+            AddCbItems(cb2, 60);
+            AddCbItems(cb3, 60);
+            AddCbItems(cb4, 60);
+            AddCbItems(cb5, 160);
+            AddCbItems(cb6, 60);
+            AddCbItems(cb7, 60);
+            AddCbItems(cb8, 60);
+
+
+            //baca dari konfig
+            txtW1.Text = ws.cfgWS[0].Name;// .Config1_Name;
+            txtW2.Text = ws.cfgWS[1].Name;
+            txtW3.Text = ws.cfgWS[2].Name;
+            txtW4.Text = ws.cfgWS[3].Name;
+            txtW5.Text = ws.cfgWS[4].Name;
+            txtW6.Text = ws.cfgWS[5].Name;
+            txtW7.Text = ws.cfgWS[6].Name;
+            txtW8.Text = ws.cfgWS[7].Name;
+            txtW9.Text = ws.cfgWS[8].Name;
+            txtW10.Text = ws.cfgWS[9].Name;
+
+            //Baca Num_Voices, dan isi cbo dg Voice[]
+            cb9.Items.Clear();
+            for (int i = 0; i < ws.Num_Voices; i++)
+            {
+                cb9.Items.Add(ws.Voice[i]);
+            }
+
+            SelectedWarning = ws.LastSelected;
+            switch (SelectedWarning)
+            {
+                case 1: btnM(btnM1, EventArgs.Empty); break;
+                case 2: btnM(btnM2, EventArgs.Empty); break;
+                case 3: btnM(btnM3, EventArgs.Empty); break;
+                case 4: btnM(btnM4, EventArgs.Empty); break;
+                case 5: btnM(btnM5, EventArgs.Empty); break;
+                case 6: btnM(btnM6, EventArgs.Empty); break;
+                case 7: btnM(btnM7, EventArgs.Empty); break;
+                case 8: btnM(btnM8, EventArgs.Empty); break;
+                case 9: btnM(btnM9, EventArgs.Empty); break;
+                case 10: btnM(btnM10, EventArgs.Empty); break;
+            }
+
+            //btnM(this, EventArgs.Empty);
+            ConfigSelectionChange(SelectedWarning);
+            SetAccessMode(false);
+
+            lblIP.Text = ws.MBTCP_strIP;
+
+            //pooling tcp ################ Sementara
+            cbTCPRemote.Checked = ws.Remote;
+            RemoteAccess(ws.Remote);
+            ResumeLayout(false);
+            tTCP.Enabled = true;
+            tTime.Enabled = true;
+       }
+
+        public frmMain()
+        {
+            InitializeComponent();
+        }
+
+        private void SetAccessMode(bool Mode)
+        {
+            //if (AccessMode == Mode) { return; }
+            AccessMode = Mode;
+            pnlConfig.Enabled = Mode;
+            pnlConfig.Visible = Mode;
+            pnlFLT.Enabled = Mode;
+            pnlFLF.Enabled = Mode;
+            pnlAccess.Visible = Mode;
+        }
+
+        private void AddCbItems(ComboBox cb, int Max)
+        {
+            int i = 0;
+            cb.Items.Clear();
+            for (i = 0; i <= Max; i++)
+            {
+                cb.Items.Add(i);
+            }
+        }
+
+        private void btnNoPress(Button btn)
+        {
+            btn.BackColor = Color.Gray;
+            btn.Font = new Font("Tahoma", btn.Font.Size, System.Drawing.FontStyle.Regular);
+        }
+        private void btnPress(Button btn)
+        {
+            btn.BackColor = Color.Red;
+            btn.Font = new Font("Tahoma", btn.Font.Size, System.Drawing.FontStyle.Bold);
+        }
+
+        private void btnEnableForSetting(bool Enabled)
+        {
+            pnlL.Enabled = Enabled;
+            pnlStart.Enabled = Enabled;
+        }
+
+        private string getTxtW(int Idx)
+        {
+            string r = "";
+            int iTag;
+            for (int i = 0; i < pnlL.Controls.Count; i++)
+            {
+                if (pnlL.Controls[i] is TextBox) 
+                {
+                    iTag = Convert.ToInt16(pnlL.Controls[i].Tag);
+                    if (iTag == Idx)
+                    {
+                        r = pnlL.Controls[i].Text;
+                        //return r;
+                        break;
+                    }
+                }
+            }
+            return r;
+        }
+
+        #region Config_Change
+        private void ConfigSelectionChange(int Idx)
+        {
+            try
+            {
+
+                if ((Idx <= 0) || (Idx > 10)) return;
+                //-------------
+                int cIdx = Idx - 1;
+                txtConfigName.Text = ws.cfgWS[cIdx].Name;
+                cbS1M1.Checked = ws.cfgWS[cIdx].Checked_Sirene;
+                cb1.SelectedIndex = ws.cfgWS[cIdx].Sirene_Duration;
+                cb10.SelectedIndex = ws.cfgWS[cIdx].Sirene_Mode;
+                CBD1M1.Checked = ws.cfgWS[cIdx].Checked_Delay1;
+                cb2.SelectedIndex = ws.cfgWS[cIdx].Delay1_Duration;
+                CBZ1M1.Checked = ws.cfgWS[cIdx].Checked_Buzzer1;
+                cb3.SelectedIndex = ws.cfgWS[cIdx].Buzzer1_Duration;
+                CBD2M1.Checked = ws.cfgWS[cIdx].Checked_Delay2;
+                cb4.SelectedIndex = ws.cfgWS[cIdx].Delay2_Duration;
+                CBV1M1.Checked = ws.cfgWS[cIdx].Checked_Voice;
+                cb5.SelectedIndex = ws.cfgWS[cIdx].Voice_Duration;
+                cb9.SelectedIndex = ws.cfgWS[cIdx].Voice_File;
+                CBD3M1.Checked = ws.cfgWS[cIdx].Checked_Delay3;
+                cb6.SelectedIndex = ws.cfgWS[cIdx].Delay3_Duration;
+                CBZ2M1.Checked = ws.cfgWS[cIdx].Checked_Buzzer2;
+                cb7.SelectedIndex = ws.cfgWS[cIdx].Buzzer2_Duration;
+                CBD4M1.Checked = ws.cfgWS[cIdx].Checked_Delay4;
+                cb8.SelectedIndex = ws.cfgWS[cIdx].Delay4_Duration;
+                //=============
+
+                //Simpan perubahan ConfigTerpilih saat ini di WS!
+                ws.CurActiveConfig = cIdx;
+            }
+            catch
+            { 
+            }
+        }
+        
+        #endregion
+
+        private void btnM(object sender, EventArgs e)
+        {
+            Button btn = sender as Button;
+
+            //Nomer Mode yg di pilih, disimpan di button.text atau button.tag
+            string Text = (sender as Button).Text;  
+            ushort iText = ushort.Parse(Text);
+            ushort iTB;
+
+            SelectedWarning = iText;
+            if (SelectedWarning != ws.LastSelected) {ws.LastSelected = iText;
+                ws.Cfg.setVal("LastSelected", SelectedWarning.ToString());
+            }
+            
+            ws.CurActiveConfig = iText;
+            ConfigSelectionChange(iText);
+            ws.SetDataAO((int)addressAO.SelectConfig, iText);
+
+            //int iTag = Convert.ToInt16(tag);
+            for(int i=0;i< pnlL.Controls.Count ;i++)
+            {
+                if (pnlL.Controls[i] is Button)
+                {
+                    iTB = ushort.Parse(pnlL.Controls[i].Text );
+                    if (iTB != iText){btnNoPress(pnlL.Controls[i] as Button);}
+                    else {btnPress(pnlL.Controls[i] as Button);}
+                }
+            }
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            Init();
+        }
+
+        private void Delay(int Sec)
+        {
+            DateTime T1 = DateTime.Now;
+            DateTime T2 = T1.AddSeconds(Sec) ;
+            while ((T1.Ticks < T2.Ticks))
+            {
+                T1 = DateTime.Now;
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(50);
+                Application.DoEvents();
+                lblStop.Text = T1.ToString("HH:mm:ss");
+                // cek Stop MBTCP
+                if ((ws.MBTCP_DO[1] == true) || (EmergencyStop)) 
+                { 
+                    ws.Stop(); 
+                    //Indikator DO[0]
+                    lblDO1.BackColor = Color.Black; lblDO2.BackColor = Color.Black; lblDO3.BackColor = Color.Black;
+                    break;
+
+                }
+            }
+        }
+
+        private void t2_Tick(object sender, EventArgs e)
+        {
+            if (IdxImgListStrobe == 0) { IdxImgListStrobe = 1; } else { IdxImgListStrobe = 0; }
+            PBSM1.Image = imageList2.Images[IdxImgListStrobe];
+            if (EmergencyStop)
+            {
+                t2.Enabled = false; PBSM1.Image = imageList2.Images[0]; PBSeq.Visible = false;
+                //Indikator DO[0]
+                lblDO1.BackColor = Color.Black; lblDO2.BackColor = Color.Black; lblDO3.BackColor = Color.Black;
+            }
+        }
+
+        private void ConfigCheckSaving()
+        {
+            bool local_ConfigIsChange = false;
+
+            int i = SelectedWarning - 1; //Index dari cfgWS mulai dari 0, (0, di pilihan = 1) 
+            string sI = SelectedWarning.ToString(); // Untuk tulisan di config
+            string h = "Config";
+            if (txtConfigName.Text != ws.cfgWS[i].Name)
+            { 
+                ws.Cfg.setVal(h + sI + "_Name", txtConfigName.Text); 
+                ws.cfgWS[i].Name = txtConfigName.Text; 
+                txtW1.Text = txtConfigName.Text; 
+                local_ConfigIsChange = true; 
+            }
+            if (cbS1M1.Checked != ws.cfgWS[i].Checked_Sirene) { ws.Cfg.setVal(h + sI + "_Checked_Sirene", cbS1M1.Checked.ToString()); ws.cfgWS[i].Checked_Sirene = cbS1M1.Checked; local_ConfigIsChange = true; }
+            if (cb1.SelectedIndex != ws.cfgWS[i].Sirene_Duration) { ws.Cfg.setVal(h + sI + "_Sirene_Duration", cb1.SelectedIndex.ToString()); ws.cfgWS[i].Sirene_Duration = (ushort)cb1.SelectedIndex; local_ConfigIsChange = true; }
+            if (cb10.SelectedIndex != ws.cfgWS[i].Sirene_Mode) { ws.Cfg.setVal(h + sI + "_Sirene_Mode", cb10.SelectedIndex.ToString()); ws.cfgWS[i].Sirene_Mode = (ushort)cb10.SelectedIndex; local_ConfigIsChange = true; }
+            if (CBD1M1.Checked != ws.cfgWS[i].Checked_Delay1) { ws.Cfg.setVal(h + sI + "_Checked_Delay1", CBD1M1.Checked.ToString()); ws.cfgWS[i].Checked_Delay1 = CBD1M1.Checked; local_ConfigIsChange = true; }
+            if (cb2.SelectedIndex != ws.cfgWS[i].Delay1_Duration) { ws.Cfg.setVal(h + sI + "_Delay1_Duration", cb2.SelectedIndex.ToString()); ws.cfgWS[i].Delay1_Duration = (ushort)cb2.SelectedIndex; local_ConfigIsChange = true; }
+
+            if (CBZ1M1.Checked != ws.cfgWS[i].Checked_Buzzer1) { ws.Cfg.setVal(h + sI + "_Checked_Buzzer1", CBZ1M1.Checked.ToString()); ws.cfgWS[i].Checked_Buzzer1 = CBZ1M1.Checked; local_ConfigIsChange = true; }
+            if (cb3.SelectedIndex != ws.cfgWS[i].Buzzer1_Duration) { ws.Cfg.setVal(h + sI + "_Buzzer1_Duration", cb3.SelectedIndex.ToString()); ws.cfgWS[i].Buzzer1_Duration = (ushort)cb3.SelectedIndex; local_ConfigIsChange = true; }
+            if (CBD2M1.Checked != ws.cfgWS[i].Checked_Delay2) { ws.Cfg.setVal(h + sI + "_Checked_Delay2", CBD2M1.Checked.ToString()); ws.cfgWS[i].Checked_Delay2 = CBD2M1.Checked; local_ConfigIsChange = true; }
+            if (cb4.SelectedIndex != ws.cfgWS[i].Delay2_Duration) { ws.Cfg.setVal(h + sI + "_Delay2_Duration", cb4.SelectedIndex.ToString()); ws.cfgWS[i].Delay2_Duration = (ushort)cb4.SelectedIndex; local_ConfigIsChange = true; }
+
+            if (CBV1M1.Checked != ws.cfgWS[i].Checked_Voice) { ws.Cfg.setVal(h + sI + "_Checked_Voice", CBV1M1.Checked.ToString()); ws.cfgWS[i].Checked_Voice = CBV1M1.Checked; local_ConfigIsChange = true; }
+            if (cb5.SelectedIndex != ws.cfgWS[i].Voice_Duration) { ws.Cfg.setVal(h + sI + "_Voice_Duration", cb5.SelectedIndex.ToString()); ws.cfgWS[i].Voice_Duration = (ushort)cb5.SelectedIndex; local_ConfigIsChange = true; }
+            if (cb9.SelectedIndex != ws.cfgWS[i].Voice_File) { ws.Cfg.setVal(h + sI + "_Voice_File", cb9.SelectedIndex.ToString()); ws.cfgWS[i].Voice_File = (ushort)cb9.SelectedIndex; local_ConfigIsChange = true; }
+            if (CBD3M1.Checked != ws.cfgWS[i].Checked_Delay3) { ws.Cfg.setVal(h + sI + "_Checked_Delay3", CBD3M1.Checked.ToString()); ws.cfgWS[i].Checked_Delay3 = CBD3M1.Checked; local_ConfigIsChange = true; }
+            if (cb6.SelectedIndex != ws.cfgWS[i].Delay3_Duration) { ws.Cfg.setVal(h + sI + "_Delay3_Duration", cb6.SelectedIndex.ToString()); ws.cfgWS[i].Delay3_Duration = (ushort)cb6.SelectedIndex; local_ConfigIsChange = true; }
+
+            if (CBZ2M1.Checked != ws.cfgWS[i].Checked_Buzzer2) { ws.Cfg.setVal(h + sI + "_Checked_Buzzer2", CBZ2M1.Checked.ToString()); ws.cfgWS[i].Checked_Buzzer2 = CBZ2M1.Checked; local_ConfigIsChange = true; }
+            if (cb7.SelectedIndex != ws.cfgWS[i].Buzzer2_Duration) { ws.Cfg.setVal(h + sI + "_Buzzer2_Duration", cb7.SelectedIndex.ToString()); ws.cfgWS[i].Buzzer2_Duration = (ushort)cb7.SelectedIndex; local_ConfigIsChange = true; }
+            if (CBD4M1.Checked != ws.cfgWS[i].Checked_Delay4) { ws.Cfg.setVal(h + sI + "_Checked_Delay4", CBD4M1.Checked.ToString()); ws.cfgWS[i].Checked_Delay4 = CBD4M1.Checked; local_ConfigIsChange = true; }
+            if (cb8.SelectedIndex != ws.cfgWS[i].Delay4_Duration) { ws.Cfg.setVal(h + sI + "_Delay4_Duration", cb8.SelectedIndex.ToString()); ws.cfgWS[i].Delay4_Duration = (ushort)cb8.SelectedIndex; local_ConfigIsChange = true; }
+
+            ConfChanged = local_ConfigIsChange;
+            if (local_ConfigIsChange) 
+            {
+                ws.SetDataAO((int)addressAO.SelectConfig, SelectedWarning);
+                ws.UpdateRegCB(SelectedWarning);
+                ws.SetSequent(SelectedWarning);
+            }
+        }
+
+        private void settingEnable(bool Enable)
+        {
+            this.SuspendLayout();
+            int idx;
+            inputPanel1.Enabled = false;
+            pnlFLF.SuspendLayout();
+
+            for (int i = 0; i < pnlFLF.Controls.Count; i++)
+            {
+                pnlFLF.Controls[i].Enabled = Enable;
+            }
+            txtConfigName.Enabled = Enable;
+            pnlAccessMode.Enabled = !Enable;
+            pnlStart.Enabled = !Enable;
+            //txtConfigName.Enabled = !Enable;
+            btnEnableForSetting(!Enable);
+            if (Enable) { idx = 1; } else { idx = 0; ConfigCheckSaving(); }
+            PBTM1.Image = imageList2.Images[idx];
+            pnlFLF.ResumeLayout(true);
+            this.ResumeLayout(true);
+        }
+        
+        private void PBTM1_Click(object sender, EventArgs e)
+        {
+            if (PBTM1.Tag.ToString() == "1")
+            { PBTM1.Tag = "0"; settingEnable(false); }
+            else { PBTM1.Tag = "1"; settingEnable(true); }
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            EmergencyStop = true;
+            //Indikator DO[0]
+            lblDO1.BackColor = Color.Black; lblDO2.BackColor = Color.Black; lblDO3.BackColor = Color.Black;
+            ws.Stop();
+        }
+
+
+        private void RunSequense(int UrutanSec)
+        {
+            if (EmergencyStop) { return; }
+            DateTime lT0 = DateTime.Now;
+            int iTimeSec;
+            int iSerineMode = cb10.SelectedIndex ;
+            switch (UrutanSec)
+            {
+                case 1: if (EmergencyStop) { break; }
+                #region Sequent1
+                    if (cbS1M1.Checked)
+                    {
+                        ws.SetDataAO((int)addressAO.Sequent, 1);//40002 = 1, seq.1
+                        iTimeSec = Convert.ToInt32(cb1.Text);
+                        if (iTimeSec > 0) 
+                        {
+                            //Posisi PBSeq di sesuaikan
+                            PBSeq.Top = cb1.Top;
+                            switch (iSerineMode)
+                            {
+                                case 0:
+                                    Set_MSB_DO(2, true);
+                                    Delay(iTimeSec);
+                                    if (EmergencyStop) { break; }
+                                    Set_MSB_DO(2, false);
+                                    break;
+                                case 1:
+                                    ws.PlaySiren();
+                                    Delay(iTimeSec);
+                                    ws.soundPlayer.Stop();
+                                    break;
+                                case 2:
+                                    Set_MSB_DO(2, true);
+                                    ws.PlaySiren();
+                                    Delay(iTimeSec);
+                                    if (EmergencyStop) { break; }
+                                    Set_MSB_DO(2, false);
+                                    ws.soundPlayer.Stop();
+
+                                    break;
+                                case 3:
+                                    //sementara sama dengan no.1
+                                    //PlaySiren
+                                    ws.PlaySiren();
+                                    Delay(iTimeSec);
+                                    ws.soundPlayer.Stop();
+                                    break;
+                            }
+                        }
+                    }
+                    break;
+                #endregion
+                #region Sequent2
+                case 2: if (EmergencyStop) { break; }
+                    if (CBD1M1.Checked)
+                    {
+                        ws.SetDataAO((int)addressAO.Sequent, 2);//Seq. MBTCP 40002 = 2
+                        iTimeSec = Convert.ToInt32(cb2.Text);
+                        if (iTimeSec > 0)
+                        {
+                            PBSeq.Top = cb2.Top;
+                            Delay(iTimeSec);
+                        }
+                    }
+                    break;
+                #endregion
+                #region Sequent3
+                case 3: if (EmergencyStop) { break; }
+                    if (CBZ1M1.Checked)
+                    {
+                        ws.SetDataAO((int)addressAO.Sequent, 3);//Seq. MBTCP 40002 = 2
+                        iTimeSec = Convert.ToInt32(cb3.Text);
+                        if (iTimeSec > 0)
+                        {
+                            PBSeq.Top = cb3.Top;
+                            //Play Sound Buzzer 
+                            ws.PlayBuzzer();
+                            //ws.soundPlayer.SoundLocation = ws.appPath + @"\Media" + @"\" + "buzzer_1s.wav";
+                            //ws.soundPlayer.PlayLooping();
+                            Delay(iTimeSec);
+                            ws.soundPlayer.Stop();
+                        }
+                    }
+                    break;
+                #endregion
+                #region Sequent4
+                case 4: if (EmergencyStop) { break; }
+                    if (CBD2M1.Checked)
+                    {
+                        ws.SetDataAO((int)addressAO.Sequent, 4);//Seq. MBTCP 40002 = 4
+                        iTimeSec = Convert.ToInt32(cb4.Text);
+                        if (iTimeSec > 0)
+                        {
+                            PBSeq.Top = cb4.Top;
+                            Delay(iTimeSec);
+                        }
+                    }
+                    break;
+                #endregion
+                #region Sequent5
+                case 5: if (EmergencyStop) { break; }
+                    if (CBV1M1.Checked)
+                    {
+                        ws.SetDataAO((int)addressAO.Sequent, 5);//Seq. MBTCP 40002 = 5
+                        iTimeSec = Convert.ToInt32(cb5.Text);
+                        if (iTimeSec > 0)
+                        {
+                            PBSeq.Top = cb5.Top;
+                            //Play Voice  
+                            try 
+                            { 
+                                ws.soundPlayer.SoundLocation = ws.appPath + @"\Media" + @"\" + cb9.Text + ".wav";
+                                ws.soundPlayer.PlayLooping();
+                                Delay(iTimeSec);
+                                ws.soundPlayer.Stop();
+                            }
+                            catch(Exception ex) 
+                            { //gagal baca file
+                                ws.ErrMessage = ex.Message;
+                            }
+                        }
+                    }
+                    break;
+                #endregion
+                #region Sequent6
+                case 6: if (EmergencyStop) { break; }
+                    if (CBD3M1.Checked)
+                    {
+                        ws.SetDataAO((int)addressAO.Sequent, 6);//Seq. MBTCP 40002 = 6
+                        iTimeSec = Convert.ToInt32(cb6.Text);
+                        if (iTimeSec > 0)
+                        {
+                            PBSeq.Top = cb6.Top;
+                            Delay(iTimeSec);
+                        }
+                    }
+                    break;
+                #endregion
+                #region Sequent7
+                case 7: if (EmergencyStop) { break; }
+                    if (CBZ2M1.Checked)
+                    {
+                        ws.SetDataAO((int)addressAO.Sequent, 7);//Seq. MBTCP 40002 = 7
+                        iTimeSec = Convert.ToInt32(cb7.Text);
+                        if (iTimeSec > 0)
+                        {
+                            PBSeq.Top = cb7.Top;
+                            ws.PlayBuzzer();
+                            Delay(iTimeSec);
+                            ws.soundPlayer.Stop();
+                        }
+                    }
+                    break;
+                #endregion
+                #region Sequent8
+                case 8: if (EmergencyStop) { break; }
+                    if (CBD4M1.Checked)
+                    {
+                        ws.SetDataAO((int)addressAO.Sequent, 8);//Seq. MBTCP 40002 = 8
+                        iTimeSec = Convert.ToInt32(cb8.Text);
+                        if (iTimeSec > 0)
+                        {
+                            PBSeq.Top = cb8.Top;
+                            Delay(iTimeSec);
+                        }
+                    }
+                    break;
+                #endregion
+            }
+        }
+
+        public void WarningRunFromTCP()
+        {
+            WarningRun();
+        }
+
+        public void StopFromTCP()
+        {
+            EmergencyStop = true;
+        }
+
+        public void SelectWarningFromTCP(int ItemSelect)
+        { 
+            switch(ItemSelect)
+            {
+                case 1: btnM(btnM1, EventArgs.Empty); break;
+                case 2: btnM(btnM2, EventArgs.Empty); break;
+                case 3: btnM(btnM3, EventArgs.Empty); break;
+                case 4: btnM(btnM4, EventArgs.Empty); break;
+                case 5: btnM(btnM5, EventArgs.Empty); break;
+                case 6: btnM(btnM6, EventArgs.Empty); break;
+                case 7: btnM(btnM7, EventArgs.Empty); break;
+                case 8: btnM(btnM8, EventArgs.Empty); break;
+                case 9: btnM(btnM9, EventArgs.Empty); break;
+                case 10: btnM(btnM10, EventArgs.Empty); break;
+            }
+        }
+
+        private void Set_MSB_DO(int Channel123, bool OnOff)
+        {
+            Color C = OnOff ? Color.Green : Color.Black;
+            int idxDO = Channel123 - 1;
+            ws.DO[idxDO] = OnOff; //Ch1.ON Flash
+            ws.WriteDigitalOutput(ws.ChDO[idxDO], ws.DO[idxDO]);
+            if (Channel123 == 1) { lblDO1.BackColor = C; }
+            else if (Channel123 == 2) { lblDO2.BackColor = C; }
+            else if (Channel123 == 3) { lblDO3.BackColor = C; }
+            ws.SetDataDO(Channel123 + 3, OnOff); //0x0005
+        }
+
+        private void Set_Status_Run(bool isRUN)
+        {
+            ws.Running = isRUN;
+            ws.SecuenceIsRun = isRUN;
+            ws.SetDataDO((int)addressDO.Status_Run, isRUN); //0x0003
+            PBSeq.Visible = isRUN;
+            pnlStart.Enabled = !isRUN;
+            pnlStop.Enabled = isRUN;
+            t2.Enabled = isRUN;
+            pnlL.Enabled = !isRUN;
+            pnlAccessMode.Enabled = !isRUN;
+            Set_MSB_DO(1, isRUN);//Ch1. Flasher/Strobe
+            Set_MSB_DO(3, isRUN);//Ch3. AP Audio Power Amplifier
+
+            DateTime T1 = DateTime.Now;
+            if (isRUN)
+            {
+                lblStart.Text = T1.ToString("HH:mm:ss");
+                lblStop.Text = T1.ToString("HH:mm:ss");
+            }
+            else
+            {
+                lblStop.Text = T1.ToString("HH:mm:ss");
+                t2.Enabled = false;
+                IdxImgListStrobe = 0;
+                EmergencyStop = false;
+                Set_MSB_DO(2, false);//Ch3. AP Audio Power Amplifier
+                //sequent running di set ke nol
+                ws.SetDataAO((int)addressAO.Sequent, 0);
+            }
+        }
+
+        private void WarningRun()
+        {
+            ws.SetDataDO((int)addressDO.CMD_Start, false);
+            Set_Status_Run(true);
+            RunSequense(1);
+            RunSequense(2);
+            RunSequense(3);
+            RunSequense(4);
+            RunSequense(5);
+            RunSequense(6);
+            RunSequense(7);
+
+            Set_MSB_DO(3, false);//Ch3. AP Audio Power Amplifier
+            RunSequense(8);
+            Set_Status_Run(false);
+
+        }
+
+        private void btnRun_Click(object sender, EventArgs e)
+        {
+            WarningRun();
+        }
+
+        private void txtW_GotFocus(object sender, EventArgs e)
+        {
+            inputPanel1.Enabled = true;
+        }
+
+        private void tTime_Tick(object sender, EventArgs e)
+        {
+            lblTime.Text = DateTime.Now.ToString("dd MMM yyyy HH:mm:ss");
+        }
+
+
+        private void pAccessMode_Click(object sender, EventArgs e)
+        {
+            pnlAccessMode.Visible = true;
+        }
+
+        private void btnMode_Click(object sender, EventArgs e)
+        {
+            if ((sender as Button).Name == "btnEngeneering")
+            {
+               if ((txtPIN.Text == ws.Pin1) || (txtPIN.Text == ws.Pin2))
+                {
+                    if (txtPIN.Text == ws.Pin1)
+                    {
+                        lblAccess.Text = "Engeneering";
+                        ws.SetDataAO((int)addressAO.AccessMode, 1);
+                    }
+                    else if (txtPIN.Text == ws.Pin2)
+                    {
+                        lblAccess.Text = "Manufacturer";
+                        ws.SetDataAO((int)addressAO.AccessMode, 2);
+                    }
+
+                    pnlAccess.Visible = false;
+                  SetAccessMode(true);
+                }
+                else
+                {
+                    lblAccess.Text = "Operator";
+                    ws.SetDataAO((int)addressAO.AccessMode, 0);
+                    SetAccessMode(false);
+                }
+                
+              pnlF.Enabled = AccessMode;
+            }
+            else
+            { 
+                SetAccessMode(false);
+                lblAccess.Text = "Operator";
+                ws.SetDataAO((int)addressAO.AccessMode, 0);
+                //pnlAccessMode.Visible = false;
+                inputPanel1.Enabled = false;
+            }
+            pnlAccess.Visible = false;
+        }
+
+
+        private void txtConfigName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                inputPanel1.Enabled = false;
+            }
+        }
+
+        private void pnlConfig_Click(object sender, EventArgs e)
+        {
+            ConfigMode = !ConfigMode;
+            settingEnable(ConfigMode);
+        }
+
+        private void txtConfigName_GotFocus(object sender, EventArgs e)
+        {
+            if (AccessMode && ConfigMode) 
+            {
+                inputPanel1.Enabled = true;
+            }
+        }
+
+        private void txtConfigName_LostFocus(object sender, EventArgs e)
+        {
+            inputPanel1.Enabled = false;
+        }
+
+        private void txtPIN_GotFocus(object sender, EventArgs e)
+        {
+            inputPanel1.Enabled = true;
+        }
+
+        private void txtPIN_LostFocus(object sender, EventArgs e)
+        {
+            inputPanel1.Enabled = false;
+        }
+
+ 
+        private void pnlAccessMode_Click(object sender, EventArgs e)
+        {
+            pnlAccess.Visible = true;
+        }
+
+        private void txtPIN_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                inputPanel1.Enabled = false;
+            }
+        }
+
+        private void tTCP_Tick(object sender, EventArgs e)
+        {
+            if (!ws.Remote) { return; }
+
+            if (ws.StartTCP)
+            {
+                try
+                {
+                    if (!ws.Running)
+                    {
+                        this.WarningRunFromTCP();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ws.ErrMessage = ex.Message;
+                }
+            }
+            if (ws.StopTCP)
+            {
+                try
+                {
+                    EmergencyStop = true;
+                    ws.Stop();
+                    t2.Enabled = false; PBSM1.Image = imageList2.Images[0]; PBSeq.Visible = false;
+                    //Indikator DO[0]
+                    lblDO1.BackColor = Color.Black; lblDO2.BackColor = Color.Black; lblDO3.BackColor = Color.Black;
+                }
+                catch (Exception ex)
+                {
+                    ws.ErrMessage = ex.Message;
+                }
+            }
+            if(ws.ConfigChangedTCP)
+            {
+                if (ws.SetActiveConfigTCP != SelectedWarning)
+                {
+                    //SelectedWarning = ws.SetActiveConfigTCP;
+                    if (ws.Running) 
+                    {
+                        ws.ConfigChangedTCP = false;
+                        return;
+                    }
+                    ActiveConfTCP();
+                    ws.ConfigChangedTCP = false;
+                }
+            }
+            if(ws.ConfigParamChange)
+            {
+                    btnMClick(SelectedWarning);
+                    ConfigCheckSaving();
+                    ws.RequestUpdateUI = false;
+                    ws.ConfigParamChange = false;
+            }
+            if (ws.ConfigDurationChange)
+            {
+                btnMClick(SelectedWarning);
+                ConfigCheckSaving();
+                ws.RequestUpdateUI = false;
+                ws.ConfigDurationChange = false;
+            }
+        }
+
+        private void btnMClick(ushort idxSelected)
+        {
+            switch (idxSelected)
+            {
+                case 1: btnM(btnM1, EventArgs.Empty); break;
+                case 2: btnM(btnM2, EventArgs.Empty); break;
+                case 3: btnM(btnM3, EventArgs.Empty); break;
+                case 4: btnM(btnM4, EventArgs.Empty); break;
+                case 5: btnM(btnM5, EventArgs.Empty); break;
+                case 6: btnM(btnM6, EventArgs.Empty); break;
+                case 7: btnM(btnM7, EventArgs.Empty); break;
+                case 8: btnM(btnM8, EventArgs.Empty); break;
+                case 9: btnM(btnM9, EventArgs.Empty); break;
+                case 10: btnM(btnM10, EventArgs.Empty); break;
+            }
+        }
+
+        private void ActiveConfTCP()
+        {
+            //SelectedWarning = ws.SetActiveConfigTCP;
+            switch (ws.SetActiveConfigTCP)
+            {
+                case 1: btnM(btnM1, EventArgs.Empty); break;
+                case 2: btnM(btnM2, EventArgs.Empty); break;
+                case 3: btnM(btnM3, EventArgs.Empty); break;
+                case 4: btnM(btnM4, EventArgs.Empty); break;
+                case 5: btnM(btnM5, EventArgs.Empty); break;
+                case 6: btnM(btnM6, EventArgs.Empty); break;
+                case 7: btnM(btnM7, EventArgs.Empty); break;
+                case 8: btnM(btnM8, EventArgs.Empty); break;
+                case 9: btnM(btnM9, EventArgs.Empty); break;
+                case 10: btnM(btnM10, EventArgs.Empty); break;
+            }
+        }
+        private void pnlStop_Click(object sender, EventArgs e)
+        {
+            EmergencyStop = true;
+            //Indikator DO[0]
+            lblDO1.BackColor = Color.Black; lblDO2.BackColor = Color.Black; lblDO3.BackColor = Color.Black;
+
+            ws.Stop();
+
+        }
+
+        private void pnlStart_Click(object sender, EventArgs e)
+        {
+            WarningRun();
+        }
+
+        private void RemoteAccess(bool b)
+        {
+            pnlStart.Enabled = !b; // !ws.Remote;
+            for (int i = 0; i < pnlL.Controls.Count; i++)
+            {
+                if (pnlL.Controls[i] is Button)
+                {
+                    pnlL.Controls[i].Enabled = !b;
+                }
+            }
+            ws.SetDataDO((int)addressDO.Status_Remote, cbTCPRemote.Checked);
+            pnlAccessMode.Enabled = !b;
+            pnlConfig.Enabled = !b;
+            if (cbTCPRemote.Checked != ws.Remote) { ws.Cfg.setVal("Remote", cbTCPRemote.Checked.ToString()); ws.Remote = cbTCPRemote.Checked; }
+        }
+        
+        private void cbTCPRemote_Click(object sender, EventArgs e)
+        {
+            bool b = cbTCPRemote.Checked;
+            RemoteAccess(b);
+            ws.Remote = b;
+        }
+
+     }
+
+
+}
