@@ -22,62 +22,7 @@ namespace WS
         int IdxImgListSetting = 0;
         bool EmergencyStop = false;
         ushort SelectedWarning = 1;
-        bool ConfChanged = false;
-
-        private void SetConfigMax(bool Init)
-        {
-            bool isChecked;
-            //ini baca dulu MaxConfig dari Inifile
-            if (ws.MaxConfig < 5) { ws.MaxConfig = 5; }
-            if (ws.MaxConfig > 10) { ws.MaxConfig = 10; }
-            if (Init)
-            {
-                cbNum.Text = ws.MaxConfig.ToString();
-                cbEnabled.Checked = ws.CheckEnabled;
-                isChecked = ws.CheckEnabled;
-            }
-            else
-            {
-                ws.MaxConfig = int.Parse( cbNum.Text);
-                ws.CheckEnabled = cbEnabled.Checked;
-                isChecked = cbEnabled.Checked;
-            }
-            cbS1M1.Visible = isChecked;
-            CBD1M1.Visible = isChecked;
-            CBZ1M1.Visible = isChecked;
-            CBD2M1.Visible = isChecked;
-            CBV1M1.Visible = isChecked;
-            CBD3M1.Visible = isChecked;
-            CBZ2M1.Visible = isChecked;
-            CBD4M1.Visible = isChecked;
-
-            txtW1.Text = ws.cfgWS[0].Name;// .Config1_Name;
-            txtW2.Text = ws.cfgWS[1].Name;
-            txtW3.Text = ws.cfgWS[2].Name;
-            txtW4.Text = ws.cfgWS[3].Name;
-            txtW5.Text = ws.cfgWS[4].Name;
-
-            txtW6.Visible = ws.MaxConfig > 5 ? true : false;
-            btnM6.Visible = ws.MaxConfig > 5 ? true : false;
-            txtW6.Text = ws.MaxConfig > 5 ? ws.cfgWS[5].Name : string.Empty;
-
-            txtW7.Visible = ws.MaxConfig > 6 ? true : false;
-            btnM7.Visible = ws.MaxConfig > 6 ? true : false;
-            txtW7.Text = ws.MaxConfig > 6 ? ws.cfgWS[6].Name : string.Empty;
-
-            txtW8.Visible = ws.MaxConfig > 7 ? true : false;
-            btnM8.Visible = ws.MaxConfig > 7 ? true : false;
-            txtW8.Text = ws.MaxConfig > 7 ? ws.cfgWS[7].Name : string.Empty;
-
-            txtW9.Visible = ws.MaxConfig > 8 ? true : false;
-            btnM9.Visible = ws.MaxConfig > 8 ? true : false;
-            txtW9.Text = ws.MaxConfig > 8 ? ws.cfgWS[8].Name : string.Empty;
-
-            txtW10.Visible = ws.MaxConfig > 9 ? true : false;
-            btnM10.Visible = ws.MaxConfig > 9 ? true : false;
-            txtW10.Text = ws.MaxConfig > 9 ? ws.cfgWS[9].Name : string.Empty;
-        
-        }
+        bool ConfChanged = false; 
 
         private void Init()
         {
@@ -110,36 +55,35 @@ namespace WS
             AddCbItems(cb8, 60);
 
 
-            SetConfigMax(true);
-            ////ini baca dulu MaxConfig dari Inifile
-            //if (ws.MaxConfig < 5) { ws.MaxConfig = 5; }
-            //if (ws.MaxConfig > 10) { ws.MaxConfig = 10; }
-            //cbNum.Text = ws.MaxConfig.ToString();
-            //txtW1.Text = ws.cfgWS[0].Name;// .Config1_Name;
-            //txtW2.Text = ws.cfgWS[1].Name;
-            //txtW3.Text = ws.cfgWS[2].Name;
-            //txtW4.Text = ws.cfgWS[3].Name;
-            //txtW5.Text = ws.cfgWS[4].Name;
+            //ini baca dulu MaxConfig dari Inifile
+            if (ws.MaxConfig < 5) { ws.MaxConfig = 5; }
+            if (ws.MaxConfig > 10) { ws.MaxConfig = 10; }
+            cbNum.Text = ws.MaxConfig.ToString();
+            txtW1.Text = ws.cfgWS[0].Name;// .Config1_Name;
+            txtW2.Text = ws.cfgWS[1].Name;
+            txtW3.Text = ws.cfgWS[2].Name;
+            txtW4.Text = ws.cfgWS[3].Name;
+            txtW5.Text = ws.cfgWS[4].Name;
 
-            //txtW6.Visible = ws.MaxConfig > 5 ? true : false;
-            //btnM6.Visible = ws.MaxConfig > 5 ? true : false;
-            //txtW6.Text = ws.MaxConfig > 5 ? ws.cfgWS[5].Name: string.Empty;
+            txtW6.Visible = ws.MaxConfig > 5 ? true : false;
+            btnM6.Visible = ws.MaxConfig > 5 ? true : false;
+            txtW6.Text = ws.MaxConfig > 5 ? ws.cfgWS[5].Name: string.Empty;
 
-            //txtW7.Visible = ws.MaxConfig > 6 ? true : false;
-            //btnM7.Visible = ws.MaxConfig > 6 ? true : false;
-            //txtW7.Text = ws.MaxConfig > 6 ? ws.cfgWS[6].Name : string.Empty;
+            txtW7.Visible = ws.MaxConfig > 6 ? true : false;
+            btnM7.Visible = ws.MaxConfig > 6 ? true : false;
+            txtW7.Text = ws.MaxConfig > 6 ? ws.cfgWS[6].Name : string.Empty;
 
-            //txtW8.Visible = ws.MaxConfig > 7 ? true : false;
-            //btnM8.Visible = ws.MaxConfig > 7 ? true : false;
-            //txtW8.Text = ws.MaxConfig > 7 ? ws.cfgWS[7].Name : string.Empty;
+            txtW8.Visible = ws.MaxConfig > 7 ? true : false;
+            btnM8.Visible = ws.MaxConfig > 7 ? true : false;
+            txtW8.Text = ws.MaxConfig > 7 ? ws.cfgWS[7].Name : string.Empty;
 
-            //txtW9.Visible = ws.MaxConfig > 8 ? true : false;
-            //btnM9.Visible = ws.MaxConfig > 8 ? true : false;
-            //txtW9.Text = ws.MaxConfig > 8 ? ws.cfgWS[8].Name : string.Empty;
+            txtW9.Visible = ws.MaxConfig > 8 ? true : false;
+            btnM9.Visible = ws.MaxConfig > 8 ? true : false;
+            txtW9.Text = ws.MaxConfig > 8 ? ws.cfgWS[8].Name : string.Empty;
 
-            //txtW10.Visible = ws.MaxConfig > 9 ? true : false;
-            //btnM10.Visible = ws.MaxConfig > 9 ? true : false;
-            //txtW10.Text = ws.MaxConfig > 9 ? ws.cfgWS[9].Name : string.Empty;
+            txtW10.Visible = ws.MaxConfig > 9 ? true : false;
+            btnM10.Visible = ws.MaxConfig > 9 ? true : false;
+            txtW10.Text = ws.MaxConfig > 9 ? ws.cfgWS[9].Name : string.Empty;
 
             //Baca Num_Voices, dan isi cbo dg Voice[]
             cb9.Items.Clear();
@@ -292,33 +236,26 @@ namespace WS
 
                 cb10.SelectedIndex = ws.cfgWS[cIdx].Sirene_Mode;
                 //cb10.Text = ws.cfgWS[cIdx].Sirene_Mode.ToString();
-                CBD1M1.Visible = ws.CheckEnabled;
                 CBD1M1.Checked = ws.cfgWS[cIdx].Checked_Delay1;
                 //cb2.SelectedIndex = ws.cfgWS[cIdx].Delay1_Duration;
                 cb2.Text = ws.cfgWS[cIdx].Delay1_Duration.ToString();
-                CBZ1M1.Visible = ws.CheckEnabled;
                 CBZ1M1.Checked = ws.cfgWS[cIdx].Checked_Buzzer1;
                 //cb3.SelectedIndex = ws.cfgWS[cIdx].Buzzer1_Duration;
                 cb3.Text = ws.cfgWS[cIdx].Buzzer1_Duration.ToString();
-                CBD2M1.Visible = ws.CheckEnabled;
                 CBD2M1.Checked = ws.cfgWS[cIdx].Checked_Delay2;
                 //cb4.SelectedIndex = ws.cfgWS[cIdx].Delay2_Duration;
                 cb4.Text = ws.cfgWS[cIdx].Delay2_Duration.ToString();
-                CBV1M1.Visible = ws.CheckEnabled;
                 CBV1M1.Checked = ws.cfgWS[cIdx].Checked_Voice;
                 //cb5.SelectedIndex = ws.cfgWS[cIdx].Voice_Duration;
                 cb5.Text = ws.cfgWS[cIdx].Voice_Duration.ToString();
                 cb9.SelectedIndex = ws.cfgWS[cIdx].Voice_File;
                 //cb9.Text = ws.cfgWS[cIdx].Voice_File.ToString();
-                CBD3M1.Visible = ws.CheckEnabled;
                 CBD3M1.Checked = ws.cfgWS[cIdx].Checked_Delay3;
                 //cb6.SelectedIndex = ws.cfgWS[cIdx].Delay3_Duration;
                 cb6.Text = ws.cfgWS[cIdx].Delay3_Duration.ToString();
-                CBZ2M1.Visible = ws.CheckEnabled;
                 CBZ2M1.Checked = ws.cfgWS[cIdx].Checked_Buzzer2;
                 //cb7.SelectedIndex = ws.cfgWS[cIdx].Buzzer2_Duration;
                 cb7.Text = ws.cfgWS[cIdx].Buzzer2_Duration.ToString();
-                CBD4M1.Visible = ws.CheckEnabled;
                 CBD4M1.Checked = ws.cfgWS[cIdx].Checked_Delay4;
                 //cb8.SelectedIndex = ws.cfgWS[cIdx].Delay4_Duration;
                 cb8.Text = ws.cfgWS[cIdx].Delay4_Duration.ToString();
@@ -469,10 +406,6 @@ namespace WS
             if (Enable) { idx = 1; } else { idx = 0; ConfigCheckSaving(); }
             PBTM1.Image = imageList2.Images[idx];
             pnlFLF.ResumeLayout(true);
-            if (lblAccess.Text == "Manufacturer") 
-            {
-                pnlLog.Visible = Enable;
-            }
             this.ResumeLayout(true);
         }
         
@@ -494,7 +427,6 @@ namespace WS
 
         private void RunSequense(int UrutanSec)
         {
-            bool IsEnabled;
             if (EmergencyStop) { return; }
             DateTime lT0 = DateTime.Now;
             int iTimeSec;
@@ -503,8 +435,7 @@ namespace WS
             {
                 case 1: if (EmergencyStop) { break; }
                 #region Sequent1
-                    IsEnabled = ((ws.CheckEnabled && cbS1M1.Checked) || !ws.CheckEnabled);
-                    if (IsEnabled)
+                    if (cbS1M1.Checked)
                     {
                         ws.SetDataAO((int)addressAO.Sequent, 1);//40002 = 1, seq.1
                         iTimeSec = Convert.ToInt32(cb1.Text);
@@ -552,9 +483,7 @@ namespace WS
                 #endregion
                 #region Sequent2
                 case 2: if (EmergencyStop) { break; }
-                    IsEnabled = ((ws.CheckEnabled && CBD1M1.Checked) || !ws.CheckEnabled);
-                    if (IsEnabled)
-                        //if (CBD1M1.Checked)
+                    if (CBD1M1.Checked)
                     {
                         ws.SetDataAO((int)addressAO.Sequent, 2);//Seq. MBTCP 40002 = 2
                         iTimeSec = Convert.ToInt32(cb2.Text);
@@ -568,9 +497,7 @@ namespace WS
                 #endregion
                 #region Sequent3
                 case 3: if (EmergencyStop) { break; }
-                    IsEnabled = ((ws.CheckEnabled && CBZ1M1.Checked) || !ws.CheckEnabled);
-                    if (IsEnabled)
-                        //if (CBZ1M1.Checked)
+                    if (CBZ1M1.Checked)
                     {
                         ws.SetDataAO((int)addressAO.Sequent, 3);//Seq. MBTCP 40002 = 2
                         iTimeSec = Convert.ToInt32(cb3.Text);
@@ -589,9 +516,7 @@ namespace WS
                 #endregion
                 #region Sequent4
                 case 4: if (EmergencyStop) { break; }
-                    IsEnabled = ((ws.CheckEnabled && CBD2M1.Checked) || !ws.CheckEnabled);
-                    if (IsEnabled)
-                        //if (CBD2M1.Checked)
+                    if (CBD2M1.Checked)
                     {
                         ws.SetDataAO((int)addressAO.Sequent, 4);//Seq. MBTCP 40002 = 4
                         iTimeSec = Convert.ToInt32(cb4.Text);
@@ -605,9 +530,7 @@ namespace WS
                 #endregion
                 #region Sequent5
                 case 5: if (EmergencyStop) { break; }
-                    IsEnabled = ((ws.CheckEnabled && CBV1M1.Checked) || !ws.CheckEnabled);
-                    if (IsEnabled)
-                        //if (CBV1M1.Checked)
+                    if (CBV1M1.Checked)
                     {
                         ws.SetDataAO((int)addressAO.Sequent, 5);//Seq. MBTCP 40002 = 5
                         iTimeSec = Convert.ToInt32(cb5.Text);
@@ -632,9 +555,7 @@ namespace WS
                 #endregion
                 #region Sequent6
                 case 6: if (EmergencyStop) { break; }
-                    IsEnabled = ((ws.CheckEnabled && CBD3M1.Checked) || !ws.CheckEnabled);
-                    if (IsEnabled)
-                        //if (CBD3M1.Checked)
+                    if (CBD3M1.Checked)
                     {
                         ws.SetDataAO((int)addressAO.Sequent, 6);//Seq. MBTCP 40002 = 6
                         iTimeSec = Convert.ToInt32(cb6.Text);
@@ -648,9 +569,7 @@ namespace WS
                 #endregion
                 #region Sequent7
                 case 7: if (EmergencyStop) { break; }
-                    IsEnabled = ((ws.CheckEnabled && CBZ2M1.Checked) || !ws.CheckEnabled);
-                    if (IsEnabled)
-                        //if (CBZ2M1.Checked)
+                    if (CBZ2M1.Checked)
                     {
                         ws.SetDataAO((int)addressAO.Sequent, 7);//Seq. MBTCP 40002 = 7
                         iTimeSec = Convert.ToInt32(cb7.Text);
@@ -666,9 +585,7 @@ namespace WS
                 #endregion
                 #region Sequent8
                 case 8: if (EmergencyStop) { break; }
-                    IsEnabled = ((ws.CheckEnabled && CBD4M1.Checked) || !ws.CheckEnabled);
-                    if (IsEnabled)
-                        //if (CBD4M1.Checked)
+                    if (CBD4M1.Checked)
                     {
                         ws.SetDataAO((int)addressAO.Sequent, 8);//Seq. MBTCP 40002 = 8
                         iTimeSec = Convert.ToInt32(cb8.Text);
@@ -843,10 +760,6 @@ namespace WS
                 inputPanel1.Enabled = false;
             }
             pnlAccess.Visible = false;
-            pnlStart.Enabled = true;
-            pnlL.Enabled = true;
-            cbTCPRemote.Enabled = true;
-
         }
 
 
@@ -891,9 +804,6 @@ namespace WS
         private void pnlAccessMode_Click(object sender, EventArgs e)
         {
             pnlAccess.Visible = true;
-            pnlStart.Enabled = false;
-            pnlL.Enabled = false;
-            cbTCPRemote.Enabled = false;
         }
 
         private void txtPIN_KeyPress(object sender, KeyPressEventArgs e)
@@ -1061,13 +971,6 @@ namespace WS
             lblDI6.BackColor = ws.DI[5] ? Color.Green : Color.Black;
             lblDI7.BackColor = ws.DI[6] ? Color.Green : Color.Black;
             lblDI8.BackColor = ws.DI[7] ? Color.Green : Color.Black;
-        }
-
-        private void btnApply_Click(object sender, EventArgs e)
-        {
-            //
-            SetConfigMax(false);
-
         }
 
 

@@ -74,6 +74,14 @@
             this.imageList1 = new System.Windows.Forms.ImageList();
             this.pnlFL = new System.Windows.Forms.Panel();
             this.pnlFLF = new System.Windows.Forms.Panel();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.pnlMBTCP = new System.Windows.Forms.Panel();
             this.cbMBTCP = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -90,6 +98,10 @@
             this.PBSeq = new System.Windows.Forms.PictureBox();
             this.pnlFLL = new System.Windows.Forms.Panel();
             this.pnlDIDO = new System.Windows.Forms.Panel();
+            this.lblDI8 = new System.Windows.Forms.Label();
+            this.lblDI7 = new System.Windows.Forms.Label();
+            this.lblDI6 = new System.Windows.Forms.Label();
+            this.lblDI5 = new System.Windows.Forms.Label();
             this.cbTCPRemote = new System.Windows.Forms.CheckBox();
             this.lblDO4 = new System.Windows.Forms.Label();
             this.lblDO3 = new System.Windows.Forms.Label();
@@ -122,7 +134,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pnlR = new System.Windows.Forms.Panel();
             this.pnlLog = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
+            this.btnApply = new System.Windows.Forms.Button();
+            this.cbEnabled = new System.Windows.Forms.CheckBox();
+            this.cbNum = new System.Windows.Forms.ComboBox();
+            this.label20 = new System.Windows.Forms.Label();
             this.pnlConfig = new System.Windows.Forms.Panel();
             this.lblSplitter5 = new System.Windows.Forms.Label();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
@@ -148,6 +163,7 @@
             this.lblControl = new System.Windows.Forms.Label();
             this.pnlF = new System.Windows.Forms.Panel();
             this.tTCP = new System.Windows.Forms.Timer();
+            this.tMSB = new System.Windows.Forms.Timer();
             this.pnlFL.SuspendLayout();
             this.pnlFLF.SuspendLayout();
             this.pnlMBTCP.SuspendLayout();
@@ -173,7 +189,7 @@
             this.wbTitle.Location = new System.Drawing.Point(0, 0);
             this.wbTitle.Name = "wbTitle";
             this.wbTitle.ScriptErrorsSuppressed = true;
-            this.wbTitle.Size = new System.Drawing.Size(910, 100);
+            this.wbTitle.Size = new System.Drawing.Size(898, 100);
             // 
             // txtW10
             // 
@@ -462,6 +478,7 @@
             this.cb8.Name = "cb8";
             this.cb8.Size = new System.Drawing.Size(70, 26);
             this.cb8.TabIndex = 14;
+            this.cb8.Tag = "8";
             // 
             // CBD4M1
             // 
@@ -472,9 +489,8 @@
             this.CBD4M1.ForeColor = System.Drawing.Color.White;
             this.CBD4M1.Location = new System.Drawing.Point(30, 244);
             this.CBD4M1.Name = "CBD4M1";
-            this.CBD4M1.Size = new System.Drawing.Size(108, 23);
+            this.CBD4M1.Size = new System.Drawing.Size(27, 23);
             this.CBD4M1.TabIndex = 8;
-            this.CBD4M1.Text = "Delay  | s:";
             // 
             // cb7
             // 
@@ -485,6 +501,7 @@
             this.cb7.Name = "cb7";
             this.cb7.Size = new System.Drawing.Size(70, 26);
             this.cb7.TabIndex = 16;
+            this.cb7.Tag = "7";
             // 
             // cb6
             // 
@@ -495,6 +512,7 @@
             this.cb6.Name = "cb6";
             this.cb6.Size = new System.Drawing.Size(70, 26);
             this.cb6.TabIndex = 15;
+            this.cb6.Tag = "6";
             // 
             // cb5
             // 
@@ -505,6 +523,7 @@
             this.cb5.Name = "cb5";
             this.cb5.Size = new System.Drawing.Size(70, 26);
             this.cb5.TabIndex = 14;
+            this.cb5.Tag = "5";
             // 
             // cb4
             // 
@@ -515,6 +534,7 @@
             this.cb4.Name = "cb4";
             this.cb4.Size = new System.Drawing.Size(70, 26);
             this.cb4.TabIndex = 13;
+            this.cb4.Tag = "4";
             // 
             // cb3
             // 
@@ -525,6 +545,7 @@
             this.cb3.Name = "cb3";
             this.cb3.Size = new System.Drawing.Size(70, 26);
             this.cb3.TabIndex = 12;
+            this.cb3.Tag = "3";
             // 
             // cb2
             // 
@@ -535,6 +556,7 @@
             this.cb2.Name = "cb2";
             this.cb2.Size = new System.Drawing.Size(70, 26);
             this.cb2.TabIndex = 11;
+            this.cb2.Tag = "2";
             // 
             // cb1
             // 
@@ -545,6 +567,7 @@
             this.cb1.Name = "cb1";
             this.cb1.Size = new System.Drawing.Size(70, 26);
             this.cb1.TabIndex = 10;
+            this.cb1.Tag = "1";
             // 
             // CBZ2M1
             // 
@@ -555,9 +578,8 @@
             this.CBZ2M1.ForeColor = System.Drawing.Color.White;
             this.CBZ2M1.Location = new System.Drawing.Point(29, 214);
             this.CBZ2M1.Name = "CBZ2M1";
-            this.CBZ2M1.Size = new System.Drawing.Size(108, 23);
+            this.CBZ2M1.Size = new System.Drawing.Size(27, 23);
             this.CBZ2M1.TabIndex = 7;
-            this.CBZ2M1.Text = "Buzzer | s:";
             // 
             // cbS1M1
             // 
@@ -568,9 +590,8 @@
             this.cbS1M1.ForeColor = System.Drawing.Color.White;
             this.cbS1M1.Location = new System.Drawing.Point(29, 6);
             this.cbS1M1.Name = "cbS1M1";
-            this.cbS1M1.Size = new System.Drawing.Size(108, 23);
+            this.cbS1M1.Size = new System.Drawing.Size(27, 23);
             this.cbS1M1.TabIndex = 2;
-            this.cbS1M1.Text = "Sirene | s:";
             // 
             // CBD1M1
             // 
@@ -581,9 +602,8 @@
             this.CBD1M1.ForeColor = System.Drawing.Color.White;
             this.CBD1M1.Location = new System.Drawing.Point(29, 34);
             this.CBD1M1.Name = "CBD1M1";
-            this.CBD1M1.Size = new System.Drawing.Size(108, 23);
+            this.CBD1M1.Size = new System.Drawing.Size(27, 23);
             this.CBD1M1.TabIndex = 2;
-            this.CBD1M1.Text = "Delay  | s:";
             // 
             // CBZ1M1
             // 
@@ -594,9 +614,8 @@
             this.CBZ1M1.ForeColor = System.Drawing.Color.White;
             this.CBZ1M1.Location = new System.Drawing.Point(29, 64);
             this.CBZ1M1.Name = "CBZ1M1";
-            this.CBZ1M1.Size = new System.Drawing.Size(108, 23);
+            this.CBZ1M1.Size = new System.Drawing.Size(27, 23);
             this.CBZ1M1.TabIndex = 3;
-            this.CBZ1M1.Text = "Buzzer | s:";
             // 
             // CBD2M1
             // 
@@ -607,9 +626,8 @@
             this.CBD2M1.ForeColor = System.Drawing.Color.White;
             this.CBD2M1.Location = new System.Drawing.Point(29, 94);
             this.CBD2M1.Name = "CBD2M1";
-            this.CBD2M1.Size = new System.Drawing.Size(108, 23);
+            this.CBD2M1.Size = new System.Drawing.Size(27, 23);
             this.CBD2M1.TabIndex = 4;
-            this.CBD2M1.Text = "Delay  | s:";
             // 
             // CBV1M1
             // 
@@ -620,9 +638,8 @@
             this.CBV1M1.ForeColor = System.Drawing.Color.White;
             this.CBV1M1.Location = new System.Drawing.Point(29, 124);
             this.CBV1M1.Name = "CBV1M1";
-            this.CBV1M1.Size = new System.Drawing.Size(108, 23);
+            this.CBV1M1.Size = new System.Drawing.Size(27, 23);
             this.CBV1M1.TabIndex = 5;
-            this.CBV1M1.Text = "Voice  | s:";
             // 
             // CBD3M1
             // 
@@ -633,9 +650,8 @@
             this.CBD3M1.ForeColor = System.Drawing.Color.White;
             this.CBD3M1.Location = new System.Drawing.Point(29, 184);
             this.CBD3M1.Name = "CBD3M1";
-            this.CBD3M1.Size = new System.Drawing.Size(108, 23);
+            this.CBD3M1.Size = new System.Drawing.Size(27, 23);
             this.CBD3M1.TabIndex = 6;
-            this.CBD3M1.Text = "Delay  | s:";
             // 
             // tTime
             // 
@@ -666,6 +682,7 @@
             this.cb9.Name = "cb9";
             this.cb9.Size = new System.Drawing.Size(109, 26);
             this.cb9.TabIndex = 17;
+            this.cb9.Tag = "9";
             // 
             // imageList1
             // 
@@ -682,13 +699,21 @@
             this.pnlFL.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlFL.Location = new System.Drawing.Point(0, 32);
             this.pnlFL.Name = "pnlFL";
-            this.pnlFL.Size = new System.Drawing.Size(458, 299);
+            this.pnlFL.Size = new System.Drawing.Size(558, 299);
             // 
             // pnlFLF
             // 
             this.pnlFLF.AutoScroll = true;
             this.pnlFLF.AutoScrollMargin = new System.Drawing.Size(2, 2);
             this.pnlFLF.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.pnlFLF.Controls.Add(this.label27);
+            this.pnlFLF.Controls.Add(this.label26);
+            this.pnlFLF.Controls.Add(this.label25);
+            this.pnlFLF.Controls.Add(this.label24);
+            this.pnlFLF.Controls.Add(this.label23);
+            this.pnlFLF.Controls.Add(this.label22);
+            this.pnlFLF.Controls.Add(this.label21);
+            this.pnlFLF.Controls.Add(this.label2);
             this.pnlFLF.Controls.Add(this.pnlMBTCP);
             this.pnlFLF.Controls.Add(this.cb10);
             this.pnlFLF.Controls.Add(this.PBSeq);
@@ -712,7 +737,79 @@
             this.pnlFLF.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlFLF.Location = new System.Drawing.Point(121, 24);
             this.pnlFLF.Name = "pnlFLF";
-            this.pnlFLF.Size = new System.Drawing.Size(337, 275);
+            this.pnlFLF.Size = new System.Drawing.Size(437, 275);
+            // 
+            // label27
+            // 
+            this.label27.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+            this.label27.ForeColor = System.Drawing.Color.White;
+            this.label27.Location = new System.Drawing.Point(51, 126);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(87, 20);
+            this.label27.Text = "Voice  | s:";
+            // 
+            // label26
+            // 
+            this.label26.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+            this.label26.ForeColor = System.Drawing.Color.White;
+            this.label26.Location = new System.Drawing.Point(51, 217);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(87, 20);
+            this.label26.Text = "Buzzer | s:";
+            // 
+            // label25
+            // 
+            this.label25.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+            this.label25.ForeColor = System.Drawing.Color.White;
+            this.label25.Location = new System.Drawing.Point(51, 247);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(87, 20);
+            this.label25.Text = "Delay  | s:";
+            // 
+            // label24
+            // 
+            this.label24.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+            this.label24.ForeColor = System.Drawing.Color.White;
+            this.label24.Location = new System.Drawing.Point(51, 187);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(87, 20);
+            this.label24.Text = "Delay  | s:";
+            // 
+            // label23
+            // 
+            this.label23.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+            this.label23.ForeColor = System.Drawing.Color.White;
+            this.label23.Location = new System.Drawing.Point(51, 97);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(87, 20);
+            this.label23.Text = "Delay  | s:";
+            // 
+            // label22
+            // 
+            this.label22.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+            this.label22.ForeColor = System.Drawing.Color.White;
+            this.label22.Location = new System.Drawing.Point(51, 66);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(87, 20);
+            this.label22.Text = "Buzzer | s:";
+            // 
+            // label21
+            // 
+            this.label21.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+            this.label21.ForeColor = System.Drawing.Color.White;
+            this.label21.Location = new System.Drawing.Point(51, 37);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(87, 20);
+            this.label21.Text = "Delay  | s:";
+            // 
+            // label2
+            // 
+            this.label2.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(51, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(87, 20);
+            this.label2.Text = "Sirene | s:";
             // 
             // pnlMBTCP
             // 
@@ -856,6 +953,7 @@
             this.cb10.Name = "cb10";
             this.cb10.Size = new System.Drawing.Size(91, 26);
             this.cb10.TabIndex = 18;
+            this.cb10.Tag = "10";
             this.cb10.Text = "HW";
             // 
             // PBSeq
@@ -880,6 +978,10 @@
             // pnlDIDO
             // 
             this.pnlDIDO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.pnlDIDO.Controls.Add(this.lblDI8);
+            this.pnlDIDO.Controls.Add(this.lblDI7);
+            this.pnlDIDO.Controls.Add(this.lblDI6);
+            this.pnlDIDO.Controls.Add(this.lblDI5);
             this.pnlDIDO.Controls.Add(this.cbTCPRemote);
             this.pnlDIDO.Controls.Add(this.lblDO4);
             this.pnlDIDO.Controls.Add(this.lblDO3);
@@ -892,9 +994,49 @@
             this.pnlDIDO.Controls.Add(this.lblDI1);
             this.pnlDIDO.Controls.Add(this.lblDI);
             this.pnlDIDO.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlDIDO.Location = new System.Drawing.Point(0, 194);
+            this.pnlDIDO.Location = new System.Drawing.Point(0, 156);
             this.pnlDIDO.Name = "pnlDIDO";
-            this.pnlDIDO.Size = new System.Drawing.Size(121, 81);
+            this.pnlDIDO.Size = new System.Drawing.Size(121, 119);
+            // 
+            // lblDI8
+            // 
+            this.lblDI8.BackColor = System.Drawing.Color.Black;
+            this.lblDI8.ForeColor = System.Drawing.Color.White;
+            this.lblDI8.Location = new System.Drawing.Point(83, 43);
+            this.lblDI8.Name = "lblDI8";
+            this.lblDI8.Size = new System.Drawing.Size(20, 20);
+            this.lblDI8.Text = "8";
+            this.lblDI8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // lblDI7
+            // 
+            this.lblDI7.BackColor = System.Drawing.Color.Black;
+            this.lblDI7.ForeColor = System.Drawing.Color.White;
+            this.lblDI7.Location = new System.Drawing.Point(57, 43);
+            this.lblDI7.Name = "lblDI7";
+            this.lblDI7.Size = new System.Drawing.Size(20, 20);
+            this.lblDI7.Text = "7";
+            this.lblDI7.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // lblDI6
+            // 
+            this.lblDI6.BackColor = System.Drawing.Color.Black;
+            this.lblDI6.ForeColor = System.Drawing.Color.White;
+            this.lblDI6.Location = new System.Drawing.Point(31, 43);
+            this.lblDI6.Name = "lblDI6";
+            this.lblDI6.Size = new System.Drawing.Size(20, 20);
+            this.lblDI6.Text = "6";
+            this.lblDI6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // lblDI5
+            // 
+            this.lblDI5.BackColor = System.Drawing.Color.Black;
+            this.lblDI5.ForeColor = System.Drawing.Color.White;
+            this.lblDI5.Location = new System.Drawing.Point(5, 43);
+            this.lblDI5.Name = "lblDI5";
+            this.lblDI5.Size = new System.Drawing.Size(20, 20);
+            this.lblDI5.Text = "5";
+            this.lblDI5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // cbTCPRemote
             // 
@@ -911,7 +1053,7 @@
             // 
             this.lblDO4.BackColor = System.Drawing.Color.Black;
             this.lblDO4.ForeColor = System.Drawing.Color.White;
-            this.lblDO4.Location = new System.Drawing.Point(83, 56);
+            this.lblDO4.Location = new System.Drawing.Point(83, 81);
             this.lblDO4.Name = "lblDO4";
             this.lblDO4.Size = new System.Drawing.Size(20, 20);
             this.lblDO4.Text = "4";
@@ -921,7 +1063,7 @@
             // 
             this.lblDO3.BackColor = System.Drawing.Color.Black;
             this.lblDO3.ForeColor = System.Drawing.Color.White;
-            this.lblDO3.Location = new System.Drawing.Point(57, 56);
+            this.lblDO3.Location = new System.Drawing.Point(57, 81);
             this.lblDO3.Name = "lblDO3";
             this.lblDO3.Size = new System.Drawing.Size(20, 20);
             this.lblDO3.Text = "3";
@@ -951,7 +1093,7 @@
             // 
             this.lblDO2.BackColor = System.Drawing.Color.Black;
             this.lblDO2.ForeColor = System.Drawing.Color.White;
-            this.lblDO2.Location = new System.Drawing.Point(31, 56);
+            this.lblDO2.Location = new System.Drawing.Point(31, 81);
             this.lblDO2.Name = "lblDO2";
             this.lblDO2.Size = new System.Drawing.Size(20, 20);
             this.lblDO2.Text = "2";
@@ -961,7 +1103,7 @@
             // 
             this.lblDO1.BackColor = System.Drawing.Color.Black;
             this.lblDO1.ForeColor = System.Drawing.Color.White;
-            this.lblDO1.Location = new System.Drawing.Point(5, 56);
+            this.lblDO1.Location = new System.Drawing.Point(5, 81);
             this.lblDO1.Name = "lblDO1";
             this.lblDO1.Size = new System.Drawing.Size(20, 20);
             this.lblDO1.Text = "1";
@@ -981,7 +1123,7 @@
             // 
             this.lblDO.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Bold);
             this.lblDO.ForeColor = System.Drawing.Color.White;
-            this.lblDO.Location = new System.Drawing.Point(5, 40);
+            this.lblDO.Location = new System.Drawing.Point(5, 65);
             this.lblDO.Name = "lblDO";
             this.lblDO.Size = new System.Drawing.Size(72, 20);
             this.lblDO.Text = "DO:";
@@ -1012,18 +1154,19 @@
             this.pnlFLT.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlFLT.Location = new System.Drawing.Point(0, 0);
             this.pnlFLT.Name = "pnlFLT";
-            this.pnlFLT.Size = new System.Drawing.Size(458, 24);
+            this.pnlFLT.Size = new System.Drawing.Size(558, 24);
             // 
             // txtConfigName
             // 
             this.txtConfigName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.txtConfigName.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtConfigName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtConfigName.Enabled = false;
             this.txtConfigName.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular);
             this.txtConfigName.ForeColor = System.Drawing.Color.White;
             this.txtConfigName.Location = new System.Drawing.Point(24, 0);
             this.txtConfigName.Name = "txtConfigName";
-            this.txtConfigName.Size = new System.Drawing.Size(367, 29);
+            this.txtConfigName.Size = new System.Drawing.Size(534, 29);
             this.txtConfigName.TabIndex = 2;
             this.txtConfigName.Text = "Warning 1";
             this.txtConfigName.GotFocus += new System.EventHandler(this.txtConfigName_GotFocus);
@@ -1048,7 +1191,7 @@
             this.pnlFT.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlFT.Location = new System.Drawing.Point(0, 0);
             this.pnlFT.Name = "pnlFT";
-            this.pnlFT.Size = new System.Drawing.Size(458, 32);
+            this.pnlFT.Size = new System.Drawing.Size(558, 32);
             // 
             // lblTitle
             // 
@@ -1058,7 +1201,7 @@
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.lblTitle.Location = new System.Drawing.Point(0, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(458, 32);
+            this.lblTitle.Size = new System.Drawing.Size(558, 32);
             this.lblTitle.Text = "WARNING STATION";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
@@ -1084,7 +1227,7 @@
             this.pnlB.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlB.Location = new System.Drawing.Point(0, 431);
             this.pnlB.Name = "pnlB";
-            this.pnlB.Size = new System.Drawing.Size(910, 24);
+            this.pnlB.Size = new System.Drawing.Size(898, 24);
             // 
             // lblIP
             // 
@@ -1099,7 +1242,7 @@
             // 
             this.lblAccess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblAccess.ForeColor = System.Drawing.Color.LimeGreen;
-            this.lblAccess.Location = new System.Drawing.Point(675, 3);
+            this.lblAccess.Location = new System.Drawing.Point(663, 3);
             this.lblAccess.Name = "lblAccess";
             this.lblAccess.Size = new System.Drawing.Size(85, 20);
             this.lblAccess.Text = "Manufacturer";
@@ -1144,7 +1287,7 @@
             // 
             this.lblTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTime.ForeColor = System.Drawing.Color.Gray;
-            this.lblTime.Location = new System.Drawing.Point(756, 3);
+            this.lblTime.Location = new System.Drawing.Point(744, 3);
             this.lblTime.Name = "lblTime";
             this.lblTime.Size = new System.Drawing.Size(147, 20);
             this.lblTime.Text = "dd MMM yyyy 00:00:00";
@@ -1220,27 +1363,67 @@
             this.pnlR.Controls.Add(this.pnlStart);
             this.pnlR.Controls.Add(this.lblControl);
             this.pnlR.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlR.Location = new System.Drawing.Point(740, 100);
+            this.pnlR.Location = new System.Drawing.Point(728, 100);
             this.pnlR.Name = "pnlR";
             this.pnlR.Size = new System.Drawing.Size(170, 331);
             // 
             // pnlLog
             // 
             this.pnlLog.BackColor = System.Drawing.Color.Black;
-            this.pnlLog.Controls.Add(this.label2);
+            this.pnlLog.Controls.Add(this.btnApply);
+            this.pnlLog.Controls.Add(this.cbEnabled);
+            this.pnlLog.Controls.Add(this.cbNum);
+            this.pnlLog.Controls.Add(this.label20);
             this.pnlLog.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlLog.Location = new System.Drawing.Point(0, 290);
+            this.pnlLog.Location = new System.Drawing.Point(0, 272);
             this.pnlLog.Name = "pnlLog";
-            this.pnlLog.Size = new System.Drawing.Size(170, 41);
+            this.pnlLog.Size = new System.Drawing.Size(170, 59);
+            this.pnlLog.Visible = false;
             // 
-            // label2
+            // btnApply
             // 
-            this.label2.BackColor = System.Drawing.Color.Black;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(0, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(170, 6);
+            this.btnApply.BackColor = System.Drawing.Color.Black;
+            this.btnApply.ForeColor = System.Drawing.Color.White;
+            this.btnApply.Location = new System.Drawing.Point(114, 9);
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(44, 23);
+            this.btnApply.TabIndex = 8;
+            this.btnApply.Text = "Apply";
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            // 
+            // cbEnabled
+            // 
+            this.cbEnabled.ForeColor = System.Drawing.Color.White;
+            this.cbEnabled.Location = new System.Drawing.Point(13, 31);
+            this.cbEnabled.Name = "cbEnabled";
+            this.cbEnabled.Size = new System.Drawing.Size(129, 20);
+            this.cbEnabled.TabIndex = 7;
+            this.cbEnabled.Text = "Check Enabled";
+            // 
+            // cbNum
+            // 
+            this.cbNum.BackColor = System.Drawing.Color.Black;
+            this.cbNum.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            this.cbNum.ForeColor = System.Drawing.Color.White;
+            this.cbNum.Items.Add("5");
+            this.cbNum.Items.Add("6");
+            this.cbNum.Items.Add("7");
+            this.cbNum.Items.Add("8");
+            this.cbNum.Items.Add("9");
+            this.cbNum.Items.Add("10");
+            this.cbNum.Location = new System.Drawing.Point(57, 8);
+            this.cbNum.Name = "cbNum";
+            this.cbNum.Size = new System.Drawing.Size(51, 23);
+            this.cbNum.TabIndex = 6;
+            this.cbNum.Text = "5";
+            // 
+            // label20
+            // 
+            this.label20.ForeColor = System.Drawing.Color.White;
+            this.label20.Location = new System.Drawing.Point(16, 12);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(40, 20);
+            this.label20.Text = "Num:";
             // 
             // pnlConfig
             // 
@@ -1493,20 +1676,25 @@
             this.pnlF.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.pnlF.Controls.Add(this.pnlFL);
             this.pnlF.Controls.Add(this.pnlFT);
-            this.pnlF.Location = new System.Drawing.Point(205, 101);
+            this.pnlF.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlF.Location = new System.Drawing.Point(170, 100);
             this.pnlF.Name = "pnlF";
-            this.pnlF.Size = new System.Drawing.Size(458, 331);
+            this.pnlF.Size = new System.Drawing.Size(558, 331);
             // 
             // tTCP
             // 
             this.tTCP.Tick += new System.EventHandler(this.tTCP_Tick);
+            // 
+            // tMSB
+            // 
+            this.tMSB.Tick += new System.EventHandler(this.tMSB_Tick);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.WindowFrame;
-            this.ClientSize = new System.Drawing.Size(910, 455);
+            this.ClientSize = new System.Drawing.Size(898, 455);
             this.Controls.Add(this.pnlF);
             this.Controls.Add(this.pnlR);
             this.Controls.Add(this.pnlL);
@@ -1640,7 +1828,6 @@
         private System.Windows.Forms.Label lblStop;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label lblSplitter1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblSplitter5;
         private System.Windows.Forms.Label lblSplitter4;
         private System.Windows.Forms.Label lblSplitter3;
@@ -1660,6 +1847,23 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Timer tTCP;
+        private System.Windows.Forms.Label lblDI8;
+        private System.Windows.Forms.Label lblDI7;
+        private System.Windows.Forms.Label lblDI6;
+        private System.Windows.Forms.Label lblDI5;
+        private System.Windows.Forms.Timer tMSB;
+        private System.Windows.Forms.Button btnApply;
+        private System.Windows.Forms.CheckBox cbEnabled;
+        private System.Windows.Forms.ComboBox cbNum;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label21;
     }
 }
 
